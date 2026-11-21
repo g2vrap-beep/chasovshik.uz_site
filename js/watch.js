@@ -327,4 +327,33 @@
   layout();
   window.addEventListener('resize', layout);
   requestAnimationFrame(render);
+
+  /* ---------- экран загрузки: ждём все детали часов и шрифты ---------- */
+  (function loader() {
+    var box = document.getElementById('loader'), bar = document.getElementById('loaderBar');
+    if (!box) return;
+    var urls = [];
+    svg.querySelectorAll('image').forEach(function (im) {
+      var u = im.getAttribute('href'); if (urls.indexOf(u) < 0) urls.push(u);
+    });
+    var total = urls.length + 1, loaded = 0, finished = false, t0 = Date.now();
+    function step() { loaded++; if (bar) bar.style.width = Math.round(loaded / total * 100) + '%'; if (loaded >= total) finish(); }
+    function finish() {
+      if (finished) return; finished = true;
+      if (bar) bar.style.width = '100%';
+      setTimeout(function () {
+        box.classList.add('is-done');
+        document.body.classList.remove('is-loading');
+      }, Math.max(0, 700 - (Date.now() - t0)));
+    }
+    urls.forEach(function (u) {
+      var im = new Image();
+      im.onload = im.onerror = function () {
+        if (im.decode) im.decode().then(step, step); else step();
+      };
+      im.src = u;
+    });
+    (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(step, step);
+    setTimeout(finish, 10000);   // страховка: не держим экран дольше 10 секунд
+  })();
 })();

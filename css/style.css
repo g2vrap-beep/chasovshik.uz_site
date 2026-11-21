@@ -309,6 +309,21 @@ address .addr { font: 400 18px/1.45 var(--head); text-transform: uppercase; }
 .foot-logo { height: 72px; width: auto; }
 .foot-row { align-items: center; }
 
+
+/* ---------- экран загрузки ---------- */
+body.is-loading { overflow: hidden; }
+.loader {
+  position: fixed; inset: 0; z-index: 100; background: var(--black);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+  transition: opacity .7s ease, visibility .7s;
+}
+.loader.is-done { opacity: 0; visibility: hidden; }
+.loader-logo { width: 150px; height: auto; animation: loaderIn 1.2s ease both; }
+.loader-bar { width: 160px; height: 1px; background: rgba(255, 255, 255, .12); overflow: hidden; }
+.loader-bar span { display: block; height: 100%; width: 0; background: var(--copper-txt); transition: width .3s ease; }
+@keyframes loaderIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .loader-logo { animation: none; } .loader { transition: none; } }
+
 /* ---------- планшет и телефон ---------- */
 @media (max-width: 1080px) {
   .nav { display: none; }
