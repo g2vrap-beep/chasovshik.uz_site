@@ -33,12 +33,12 @@ window.PRICES = [
 
 /* Подписи этапов сборки в hero: какая деталь — какая услуга */
 window.STAGES = [
-  { part: 'strap',  title: 'Браслет',   service: 'Замена и подгонка браслетов', price: 'fit' },
-  { part: 'case',   title: 'Корпус',    service: 'Полировка корпуса',           price: 'polish' },
-  { part: 'dial',   title: 'Циферблат', service: 'Установка стрелок и цифр',    price: 'hands' },
-  { part: 'bezel',  title: 'Безель',    service: 'Полировка и родирование',     price: 'polish' },
-  { part: 'hands',  title: 'Механизм',  service: 'Репассаж механизма',          price: 'repass' },
-  { part: 'glass',  title: 'Стекло',    service: 'Замена стекла',               price: 'glass' }
+  { title: 'Механизм',  service: 'Репассаж механизма',          price: 'repass' },
+  { title: 'Циферблат', service: 'Установка стрелок и цифр',    price: 'hands' },
+  { title: 'Корпус',    service: 'Полировка корпуса',           price: 'polish' },
+  { title: 'Браслет',   service: 'Замена и подгонка браслетов', price: 'fit' },
+  { title: 'Безель',    service: 'Полировка и родирование',     price: 'rhodium' },
+  { title: 'Стекло',    service: 'Замена стекла',               price: 'glass' }
 ];
 
 window.fmtPrice = function (v) {

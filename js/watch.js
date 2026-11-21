@@ -26,19 +26,29 @@
 
   /* Разлёт деталей: dx, dy (ед. SVG), поворот, масштаб, окно сборки [start, end] по прогрессу */
   var PARTS = [
-    { id: 'strapT', dx: -40,  dy: -250, r: -16, s: 0.06, t: [0.02, 0.20] },
-    { id: 'strapB', dx: 90,   dy: 250,  r: 12,  s: 0.06, t: [0.04, 0.22] },
-    { id: 'case',   dx: -170, dy: 190,  r: -20, s: 0.10, t: [0.12, 0.32] },
-    { id: 'dial',   dx: 240,  dy: -120,  r: 28,  s: 0.12, t: [0.24, 0.42] },
-    { id: 'bezel',  dx: 230,  dy: 200,  r: -34, s: 0.10, t: [0.34, 0.52] },
-    { id: 'hh',     dx: -150, dy: -200, r: 50,  s: 0.25, t: [0.44, 0.60] },
-    { id: 'mh',     dx: -90,  dy: -260, r: -40, s: 0.25, t: [0.47, 0.63] },
-    { id: 'sh',     dx: -200, dy: -100,  r: 70,  s: 0.25, t: [0.50, 0.66] },
-    { id: 'glass',  dx: 110,  dy: -250, r: 18,  s: 0.20, t: [0.58, 0.72] }
+    { id: 'dial',   dx: 240,  dy: -120, r: 28,  s: 0.12, t: [0.34, 0.44] },
+    { id: 'hh',     dx: -150, dy: -200, r: 50,  s: 0.25, t: [0.42, 0.50] },
+    { id: 'mh',     dx: -90,  dy: -260, r: -40, s: 0.25, t: [0.44, 0.52] },
+    { id: 'sh',     dx: -200, dy: -100, r: 70,  s: 0.25, t: [0.46, 0.54] },
+    { id: 'case',   dx: -190, dy: 200,  r: -20, s: 0.10, t: [0.50, 0.62] },
+    { id: 'strapT', dx: -40,  dy: -260, r: -16, s: 0.06, t: [0.54, 0.66] },
+    { id: 'strapB', dx: 90,   dy: 260,  r: 12,  s: 0.06, t: [0.56, 0.68] },
+    { id: 'bezel',  dx: 230,  dy: 200,  r: -34, s: 0.10, t: [0.62, 0.72] },
+    { id: 'glass',  dx: 110,  dy: -250, r: 18,  s: 0.20, t: [0.68, 0.76] }
   ];
-  /* Какая подпись активна: индекс в window.STAGES и окно */
-  var STAGE_T = [0.02, 0.12, 0.24, 0.34, 0.44, 0.58];
-  var DONE_AT = 0.74, EXIT_AT = 0.88;
+  /* Механизм: сборка задней стороны, переворот, посадка */
+  var MV = {
+    f: { base: 'mv_base.webp', balance: 'mv_balance.webp', rotor: 'mv_rotor.webp', front: 'mv_front.webp' },
+    d: 151.8,                     // ширина картинки в ед. SVG (диаметр механизма ≈ 150)
+    balance: { dx: 70, dy: -105, r: 35, t: [0.04, 0.13] },
+    rotor:   { dx: -40, dy: 115, r: -70, t: [0.11, 0.21] },
+    flip: [0.21, 0.31],
+    settle: [0.28, 0.38],         // уменьшение с крупного плана до размера в часах
+    big: 2.0, bigMobile: 1.4
+  };
+  /* Подписи этапов (window.STAGES) — с какого прогресса горит каждая */
+  var STAGE_T = [0.03, 0.34, 0.50, 0.54, 0.62, 0.68];
+  var DONE_AT = 0.78, EXIT_AT = 0.90;
 
   function el(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
@@ -92,8 +102,22 @@
   var sB = el('g', { transform: 'translate(0 ' + STRAP_OFF + ')' }, part('strapB'));
   img(L.strap, sB, { mask: 'url(#strapMask)' });
 
-  var cg = part('case');
-  img(L.caseL, cg);
+  img(L.caseL, part('case'));
+
+  /* механизм */
+  var mvG = part('mv');
+  var flipG = el('g', {}, mvG);
+  var mx = CX - MV.d / 2, my = CY - MV.d / 2;
+  function mvImg(f, parent) { return el('image', { href: A + f, x: mx, y: my, width: MV.d, height: MV.d }, parent); }
+  var back = el('g', {}, flipG);
+  mvImg(MV.f.base, back);
+  var balG = el('g', {}, back); mvImg(MV.f.balance, balG);
+  var rotG = el('g', {}, back); mvImg(MV.f.rotor, rotG);
+  var front = el('g', { transform: 'translate(' + CX + ' 0) scale(-1 1) translate(' + (-CX) + ' 0)' }, flipG);
+  mvImg(MV.f.front, front);
+  front.style.display = 'none';
+
+  var cg = part('ring');
   (function rehaut() {
     var dcx = L.dial.x + L.dial.w / 2, dcy = L.dial.y + L.dial.h / 2;
     var rd = L.dial.w / 2 * RG.k, r0 = rd - 1.5, r1 = RG.r1, mid = (r0 + r1) / 2, ro = RG.rb - 1.7;
@@ -220,10 +244,31 @@
       G[c.id].setAttribute('transform',
         'translate(' + tx.toFixed(2) + ' ' + ty.toFixed(2) + ') rotate(' + (c.r * e).toFixed(2) + ' ' + CX + ' ' + CY +
         ') translate(' + CX + ' ' + CY + ') scale(' + sc.toFixed(4) + ') translate(' + (-CX) + ' ' + (-CY) + ')');
-      G[c.id].style.opacity = (c.id === 'glass' ? (1 - e) : (0.55 + 0.45 * (1 - e))).toFixed(3);
+      G[c.id].style.opacity = (c.id === 'glass' ? (1 - e) : (0.35 + 0.65 * (1 - e))).toFixed(3);
     }
 
-    var assembled = clamp((p - 0.6) / 0.14, 0, 1);
+    G.ring.setAttribute('transform', G['case'].getAttribute('transform'));
+    G.ring.style.opacity = G['case'].style.opacity;
+
+    /* механизм */
+    function lpOf(t) { return easeOut(clamp((p - t[0]) / (t[1] - t[0]), 0, 1)); }
+    var eb = 1 - lpOf(MV.balance.t), er = 1 - lpOf(MV.rotor.t);
+    var fb = Math.sin(float * .8) * 4 * eb, fr = Math.cos(float * .7) * 4 * er;
+    balG.setAttribute('transform', 'translate(' + (MV.balance.dx * eb + fb).toFixed(2) + ' ' + (MV.balance.dy * eb).toFixed(2) + ') rotate(' + (MV.balance.r * eb).toFixed(2) + ' ' + CX + ' ' + CY + ')');
+    rotG.setAttribute('transform', 'translate(' + (MV.rotor.dx * er).toFixed(2) + ' ' + (MV.rotor.dy * er + fr).toFixed(2) + ') rotate(' + (MV.rotor.r * er).toFixed(2) + ' ' + CX + ' ' + CY + ')');
+    balG.style.opacity = (1 - eb * .25).toFixed(3); rotG.style.opacity = (1 - er * .25).toFixed(3);
+    var fl = easeInOut(clamp((p - MV.flip[0]) / (MV.flip[1] - MV.flip[0]), 0, 1));
+    var sx = Math.cos(Math.PI * fl), sy = 1 - .08 * Math.sin(Math.PI * fl);
+    var showFront = sx < 0;
+    if (showFront !== flipG.__front) { back.style.display = showFront ? 'none' : ''; front.style.display = showFront ? '' : 'none'; flipG.__front = showFront; }
+    flipG.setAttribute('transform', 'translate(' + CX + ' ' + CY + ') scale(' + (Math.abs(sx) < .02 ? .02 * (sx < 0 ? -1 : 1) : sx).toFixed(4) + ' ' + sy.toFixed(4) + ') translate(' + (-CX) + ' ' + (-CY) + ')');
+    flipG.style.filter = 'brightness(' + (1 - .35 * Math.sin(Math.PI * fl)).toFixed(3) + ')';
+    var big = mobile ? MV.bigMobile : MV.big;
+    var ms = big + (1 - big) * easeInOut(clamp((p - MV.settle[0]) / (MV.settle[1] - MV.settle[0]), 0, 1));
+    var mfy = Math.sin(float * .5) * 3 * (1 - fl);
+    mvG.setAttribute('transform', 'translate(0 ' + mfy.toFixed(2) + ') translate(' + CX + ' ' + CY + ') scale(' + ms.toFixed(4) + ') translate(' + (-CX) + ' ' + (-CY) + ')');
+
+    var assembled = clamp((p - 0.66) / 0.12, 0, 1);
     shadow.style.opacity = (.25 + .75 * assembled).toFixed(3);
     glowEl.style.opacity = (.5 + .5 * assembled).toFixed(3);
 

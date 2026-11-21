@@ -75,7 +75,7 @@ p { margin: 0 0 1em; }
 .nav a:hover { color: var(--white); }
 
 /* ---------- HERO: сборка ---------- */
-.assemble { position: relative; height: 420vh; }
+.assemble { position: relative; height: 600vh; }
 .stage {
   position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
   background: var(--black);
