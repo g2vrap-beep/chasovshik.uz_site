@@ -48,7 +48,8 @@
   };
   /* Подписи этапов (window.STAGES) — с какого прогресса горит каждая */
   var STAGE_T = [0.03, 0.34, 0.50, 0.54, 0.62, 0.68];
-  var DONE_AT = 0.78, EXIT_AT = 0.90;
+  var DONE_AT = 0.78, EXIT_AT = 0.93;
+  var ZOOM = { t: [0.80, 0.89], desktop: 2.3, mobile: 1.8 };   // крупный план в конце
 
   function el(tag, attrs, parent) {
     var n = document.createElementNS(NS, tag);
@@ -275,7 +276,9 @@
     /* уход вниз */
     var ex = easeInOut(clamp((p - EXIT_AT) / (1 - EXIT_AT), 0, 1));
     var Hu = section.__Hu || 640;
-    root.setAttribute('transform', 'translate(0 ' + (ex * Hu * .42).toFixed(1) + ') translate(' + CX + ' ' + CY + ') scale(' + (1 - ex * .18).toFixed(4) + ') translate(' + (-CX) + ' ' + (-CY) + ')');
+    var zq = easeInOut(clamp((p - ZOOM.t[0]) / (ZOOM.t[1] - ZOOM.t[0]), 0, 1));
+    var zoom = 1 + ((mobile ? ZOOM.mobile : ZOOM.desktop) - 1) * zq;
+    root.setAttribute('transform', 'translate(0 ' + (ex * Hu * .42).toFixed(1) + ') translate(' + CX + ' ' + CY + ') scale(' + (zoom * (1 - ex * .45)).toFixed(4) + ') translate(' + (-CX) + ' ' + (-CY) + ')');
     svg.style.opacity = (1 - ex * .6).toFixed(3);
 
     /* тексты */
