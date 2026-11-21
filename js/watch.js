@@ -7,18 +7,21 @@
   var CX = 150, CY = 240;
   var NS = 'http://www.w3.org/2000/svg';
 
-  /* Слои (координаты из проекта ASRLUX, Datejust 41) */
+  /* Слои (координаты из проекта ASRLUX, Submariner 41 · сталь, чёрный) */
   var L = {
-    strap:  { f: 'strap_jubilee.avif', x: 100.4,  y: 221.63, w: 99.21,  h: 263.75 },
-    caseL:  { f: 'case.avif',          x: 51.39,  y: 126.27, w: 215.83, h: 233.19 },
-    dial:   { f: 'dial_green.avif',    x: 70.92,  y: 161.21, w: 158.62, h: 158.39 },
-    date:   { x: 208.56, y: 240.11, w: 16.29, h: 10.9 },
-    cyc:    { f: 'cyclops.avif',       x: 192.93, y: 228.38, w: 31.27,  h: 23.45 },
-    bezel:  { f: 'bezel_fluted.avif',  x: 52.0,   y: 142.52, w: 196.0,  h: 195.08 },
-    hh:     { f: 'hand-hour.avif',     x: 144.79, y: 187.46, w: 10.35,  h: 65.27 },
-    mh:     { f: 'hand-minute.avif',   x: 145.03, y: 171.59, w: 10.01,  h: 81.83 },
-    sh:     { f: 'hand-second.avif',   x: 146.69, y: 168.24, w: 6.69,   h: 93.5 }
+    strap:  { f: 'strap_oyster.avif',  x: 100.61, y: 221.63, w: 99.21,  h: 245.77 },
+    caseL:  { f: 'case.avif',          x: 52.68,  y: 131.63, w: 213.58, h: 225.08 },
+    dial:   { f: 'dial_black.avif',    x: 74.0,   y: 163.33, w: 152.18, h: 153.45 },
+    date:   { x: 201.24, y: 240.36, w: 16.82, h: 10.8 },
+    cyc:    { f: 'cyclops.avif',       x: 185.09, y: 228.25, w: 32.3,   h: 24.23 },
+    bezel:  { f: 'bezel_black.avif',   x: 52.12,  y: 141.78, w: 196.0,  h: 198.18 },
+    hh:     { f: 'hand-hour.avif',     x: 141.53, y: 195.24, w: 16.88,  h: 51.75 },
+    mh:     { f: 'hand-minute.avif',   x: 143.49, y: 170.0,  w: 13.25,  h: 76.5 },
+    sh:     { f: 'hand-second.avif',   x: 145.19, y: 170.57, w: 9.75,   h: 88.5 }
   };
+  /* Рехаут (кольцо между циферблатом и безелем): циферблат и стрелки уменьшены в K раз */
+  var RG = { k: .89, r1: 79, rb: 76.6 };
+  var STEEL = '#c3c7cd';
   var STRAP_OFF = 90;
 
   /* Разлёт деталей: dx, dy (ед. SVG), поворот, масштаб, окно сборки [start, end] по прогрессу */
@@ -58,7 +61,7 @@
 
   /* ---------- построение SVG ---------- */
   var defs = el('defs', {}, svg);
-  var lg = el('linearGradient', { id: 'strapFade', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 250, x2: 0, y2: 480 }, defs);
+  var lg = el('linearGradient', { id: 'strapFade', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 250, x2: 0, y2: 466 }, defs);
   el('stop', { offset: 0, 'stop-color': '#fff' }, lg);
   el('stop', { offset: 0.3, 'stop-color': '#fff' }, lg);
   el('stop', { offset: 1, 'stop-color': '#fff', 'stop-opacity': 0 }, lg);
@@ -89,9 +92,33 @@
   var sB = el('g', { transform: 'translate(0 ' + STRAP_OFF + ')' }, part('strapB'));
   img(L.strap, sB, { mask: 'url(#strapMask)' });
 
-  img(L.caseL, part('case'));
+  var cg = part('case');
+  img(L.caseL, cg);
+  (function rehaut() {
+    var dcx = L.dial.x + L.dial.w / 2, dcy = L.dial.y + L.dial.h / 2;
+    var rd = L.dial.w / 2 * RG.k, r0 = rd - 1.5, r1 = RG.r1, mid = (r0 + r1) / 2, ro = RG.rb - 1.7;
+    function mix(h, t) {
+      return '#' + [1, 3, 5].map(function (i) {
+        var v = parseInt(h.substr(i, 2), 16);
+        return Math.round(t < 0 ? v * (1 + t) : v + (255 - v) * t).toString(16).padStart(2, '0');
+      }).join('');
+    }
+    var la = el('linearGradient', { id: 'rgA', gradientUnits: 'userSpaceOnUse', x1: dcx - r1, y1: dcy - r1, x2: dcx + r1, y2: dcy + r1 }, defs);
+    [[0, mix(STEEL, -.3)], [.3, mix(STEEL, -.12)], [.5, STEEL], [.72, mix(STEEL, .45)], [1, mix(STEEL, -.12)]]
+      .forEach(function (a) { el('stop', { offset: a[0], 'stop-color': a[1] }, la); });
+    var lc = el('linearGradient', { id: 'rgC', gradientUnits: 'userSpaceOnUse', x1: dcx - r1, y1: dcy - r1, x2: dcx + r1, y2: dcy + r1 }, defs);
+    [[0, '#7d8189'], [.5, '#c9ccd2'], [1, '#f0f1f4']].forEach(function (a) { el('stop', { offset: a[0], 'stop-color': a[1] }, lc); });
+    var rb = el('radialGradient', { id: 'rgB', gradientUnits: 'userSpaceOnUse', cx: dcx, cy: dcy, r: r1 }, defs);
+    [[(rd - .5) / r1, .4], [(rd + 3.5) / r1, 0], [(RG.rb - 2.4) / r1, 0], [RG.rb / r1, .35], [1, .35]]
+      .forEach(function (a) { el('stop', { offset: a[0], 'stop-color': '#000', 'stop-opacity': a[1] }, rb); });
+    el('circle', { cx: dcx, cy: dcy, r: mid, fill: 'none', stroke: 'url(#rgA)', 'stroke-width': r1 - r0 }, cg);
+    el('circle', { cx: dcx, cy: dcy, r: r1, fill: 'url(#rgB)' }, cg);
+    el('circle', { cx: dcx, cy: dcy, r: ro + .8, fill: 'none', stroke: 'url(#rgC)', 'stroke-opacity': .7, 'stroke-width': 1.6 }, cg);
+    el('circle', { cx: dcx, cy: dcy, r: rd + .2, fill: 'none', stroke: '#000', 'stroke-opacity': .55, 'stroke-width': .5 }, cg);
+    L.dcx = dcx; L.dcy = dcy;
+  })();
 
-  var dg = part('dial');
+  var dg = el('g', { transform: 'translate(' + L.dcx + ' ' + L.dcy + ') scale(' + RG.k + ') translate(' + (-L.dcx) + ' ' + (-L.dcy) + ')' }, part('dial'));
   var d = L.date;
   el('rect', { x: d.x - d.w / 2 - 1, y: d.y - d.h / 2 - 1, width: d.w + 2, height: d.h + 2, fill: '#f4f1ea' }, dg);
   img(L.dial, dg);
@@ -110,21 +137,23 @@
   }, dg);
   sub.textContent = 'TASHKENT';
   var tag = el('text', {
-    x: CX, y: 284, 'font-size': 3.4, 'text-anchor': 'middle', 'letter-spacing': .8,
+    x: CX, y: 270, 'font-size': 3.4, 'text-anchor': 'middle', 'letter-spacing': .8,
     'font-family': 'Golos Text, Arial, sans-serif', fill: '#e4ebe7', opacity: .9
   }, dg);
   tag.textContent = 'ВРЕМЯ БЕСЦЕННО';
 
   img(L.bezel, part('bezel'));
 
-  var rotH = el('g', {}, part('hh')); img(L.hh, rotH);
-  var rotM = el('g', {}, part('mh')); img(L.mh, rotM);
-  var rotS = el('g', {}, part('sh')); img(L.sh, rotS);
+  var HS = 'translate(' + CX + ' ' + CY + ') scale(' + RG.k + ') translate(' + (-CX) + ' ' + (-CY) + ')';
+
+  var rotH = el('g', {}, el('g', { transform: HS }, part('hh'))); img(L.hh, rotH);
+  var rotM = el('g', {}, el('g', { transform: HS }, part('mh'))); img(L.mh, rotM);
+  var rotS = el('g', {}, el('g', { transform: HS }, part('sh'))); img(L.sh, rotS);
 
   var gl = part('glass');
-  img(L.cyc, gl);
-  el('circle', { cx: CX, cy: CY, r: 79.5, fill: 'url(#glareG)' }, gl);
-  el('circle', { cx: CX, cy: CY, r: 79.5, fill: 'none', stroke: '#fff', 'stroke-opacity': .10, 'stroke-width': .6 }, gl);
+  img(L.cyc, el('g', { transform: 'translate(' + L.dcx + ' ' + L.dcy + ') scale(' + RG.k + ') translate(' + (-L.dcx) + ' ' + (-L.dcy) + ')' }, gl));
+  el('circle', { cx: CX, cy: CY, r: 76.6, fill: 'url(#glareG)' }, gl);
+  el('circle', { cx: CX, cy: CY, r: 76.6, fill: 'none', stroke: '#fff', 'stroke-opacity': .10, 'stroke-width': .6 }, gl);
 
   /* ---------- время Ташкента (UTC+5, без перевода часов) ---------- */
   function tashkent() {
