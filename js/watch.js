@@ -330,21 +330,22 @@
 
   /* ---------- экран загрузки: ждём все детали часов и шрифты ---------- */
   (function loader() {
-    var box = document.getElementById('loader'), bar = document.getElementById('loaderBar');
+    var box = document.getElementById('loader'), bar = document.getElementById('loaderBar'), pct = document.getElementById('loaderPct');
     if (!box) return;
     var urls = [];
     svg.querySelectorAll('image').forEach(function (im) {
       var u = im.getAttribute('href'); if (urls.indexOf(u) < 0) urls.push(u);
     });
     var total = urls.length + 1, loaded = 0, finished = false, t0 = Date.now();
-    function step() { loaded++; if (bar) bar.style.width = Math.round(loaded / total * 100) + '%'; if (loaded >= total) finish(); }
+    function show(v) { if (bar) bar.style.width = v + '%'; if (pct) pct.textContent = v + '%'; }
+    function step() { loaded++; show(Math.round(loaded / total * 100)); if (loaded >= total) finish(); }
     function finish() {
       if (finished) return; finished = true;
-      if (bar) bar.style.width = '100%';
+      show(100);
       setTimeout(function () {
         box.classList.add('is-done');
         document.body.classList.remove('is-loading');
-      }, Math.max(0, 700 - (Date.now() - t0)));
+      }, Math.max(250, 500 - (Date.now() - t0)));
     }
     urls.forEach(function (u) {
       var im = new Image();

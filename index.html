@@ -15,7 +15,15 @@
 <link rel="preload" href="assets/fonts/manrope-cyrillic-400-normal.woff2?v=2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/watch/case.avif" type="image/avif">
 <link rel="preload" as="image" href="assets/watch/dial_black.avif" type="image/avif">
-<link rel="stylesheet" href="css/style.css">
+<style>
+body.is-loading{overflow:hidden}
+.loader{position:fixed;inset:0;z-index:100;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .6s ease,visibility .6s}
+.loader.is-done{opacity:0;visibility:hidden}
+.loader-bar{width:180px;height:1px;background:rgba(255,255,255,.14);overflow:hidden}
+.loader-bar span{display:block;height:100%;width:0;background:#c08a63;transition:width .25s ease}
+.loader-pct{margin:0;font:400 12px/1 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;letter-spacing:.12em;color:rgba(255,255,255,.55);font-variant-numeric:tabular-nums}
+</style>
+<link rel="stylesheet" href="css/style.css?v=5">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -102,9 +110,9 @@
 <path class="lg-word" fill-rule="nonzero" d="M 259.25 198.75C259.35 199.63 259.84 200.37 260.72 200.94C261.59 201.52 262.84 201.81 264.47 201.81C265.75 201.81 266.85 201.65 267.74 201.33C268.64 201.01 269.09 200.52 269.09 199.84C269.09 198.97 268.25 198.33 266.58 197.94L261.31 196.61C258.35 195.87 256.88 194.39 256.88 192.16C256.88 190.56 257.55 189.36 258.89 188.56C260.24 187.76 261.93 187.37 263.98 187.37C266.17 187.37 267.97 187.82 269.39 188.73C270.80 189.64 271.59 190.93 271.76 192.60L268.64 192.75C268.53 192.01 268.06 191.38 267.23 190.86C266.41 190.35 265.28 190.09 263.85 190.09C262.78 190.09 261.90 190.25 261.21 190.58C260.53 190.90 260.19 191.36 260.19 191.94C260.19 192.80 260.98 193.41 262.58 193.79L267.52 195.00C269.19 195.41 270.42 195.96 271.21 196.65C272.00 197.33 272.39 198.30 272.39 199.53C272.39 201.21 271.69 202.46 270.28 203.29C268.88 204.12 266.94 204.53 264.47 204.53C259.20 204.53 256.42 202.64 256.14 198.84ZM 259.25 198.75 "/>
 <path class="lg-word" fill-rule="nonzero" d="M 287.98 187.37L291.28 187.37L291.28 204.53L287.98 204.53L287.98 200.39L277.97 200.39L277.97 204.53L274.67 204.53L274.67 187.37L277.97 187.37L277.97 197.33L287.98 197.33ZM 287.98 187.37 "/></symbol>
 </svg>
-<div class="loader" id="loader" role="status" aria-label="Загрузка">
-  <svg class="loader-logo" viewBox="0 0 186 124" aria-hidden="true"><use href="#logo-v"/></svg>
+<div class="loader" id="loader" role="status" aria-live="polite">
   <div class="loader-bar"><span id="loaderBar"></span></div>
+  <p class="loader-pct" id="loaderPct">0%</p>
 </div>
 <noscript><style>.loader { display: none; } body.is-loading { overflow: auto; }</style></noscript>
 
@@ -310,8 +318,8 @@
   <a class="js-tg" href="#" target="_blank" rel="noopener">Telegram</a>
 </div>
 
-<script src="js/data.js"></script>
-<script src="js/watch.js"></script>
-<script src="js/main.js"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/watch.js?v=5"></script>
+<script src="js/main.js?v=5"></script>
 </body>
 </html>
