@@ -73,7 +73,7 @@
   el('stop', { offset: 1, 'stop-color': '#000', 'stop-opacity': 0 }, rg);
 
   var glow = el('radialGradient', { id: 'glowG' }, defs);
-  el('stop', { offset: 0, 'stop-color': '#a94e2b', 'stop-opacity': .28 }, glow);
+  el('stop', { offset: 0, 'stop-color': '#804e2f', 'stop-opacity': .32 }, glow);
   el('stop', { offset: 1, 'stop-color': '#a94e2b', 'stop-opacity': 0 }, glow);
 
   var glare = el('linearGradient', { id: 'glareG', x1: 0, y1: 0, x2: 1, y2: 1 }, defs);
@@ -126,19 +126,14 @@
     x: d.x, y: d.y + 0.4, 'font-size': d.h * .82, 'text-anchor': 'middle', 'dominant-baseline': 'central',
     'font-family': 'Arial, Helvetica, sans-serif', 'font-weight': 700, fill: '#111'
   }, dg);
-  var brand = el('text', {
-    x: CX, y: 205, 'font-size': 7.2, 'text-anchor': 'middle', 'letter-spacing': 1.1,
-    'font-family': 'Forum, Georgia, serif', fill: '#eef2ef'
-  }, dg);
-  brand.textContent = 'CHASOVSHIK';
-  var sub = el('text', {
-    x: CX, y: 213, 'font-size': 3.2, 'text-anchor': 'middle', 'letter-spacing': .9,
-    'font-family': 'Golos Text, Arial, sans-serif', fill: '#cfd8d3', opacity: .85
-  }, dg);
-  sub.textContent = 'TASHKENT';
+  /* логотип CHASOVSHIK на циферблате (символы из спрайта в index.html) */
+  var lgM = el('use', { href: '#logo-mark', x: CX - 4.2, y: 191.5, width: 8.4, height: 9.3 }, dg);
+  lgM.setAttribute('style', '--mark:#eef1f3');
+  var lgW = el('use', { href: '#logo-word', x: CX - 19, y: 202.4, width: 38, height: 4.6 }, dg);
+  lgW.setAttribute('style', '--word:#eef1f3');
   var tag = el('text', {
-    x: CX, y: 270, 'font-size': 3.4, 'text-anchor': 'middle', 'letter-spacing': .8,
-    'font-family': 'Golos Text, Arial, sans-serif', fill: '#e4ebe7', opacity: .9
+    x: CX, y: 270, 'font-size': 2.9, 'text-anchor': 'middle', 'letter-spacing': .5,
+    'font-family': 'Unbounded, Arial, sans-serif', fill: '#e4ebe7', opacity: .85
   }, dg);
   tag.textContent = 'ВРЕМЯ БЕСЦЕННО';
 
