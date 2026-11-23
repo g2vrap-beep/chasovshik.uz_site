@@ -4,7 +4,7 @@ window.SITE = {
   phone: '+998 95 838 99 99',
   phoneHref: 'tel:+998958389999',
   telegram: 'chasovshikuz_mirobod',       // username менеджера в Telegram (без @)
-  instagram: '',                          // TODO: https://instagram.com/...
+  instagram: 'https://www.instagram.com/chasovshik.uz/',
   map: 'https://yandex.uz/maps/org/chasovshik_uz/70462933949/',
   address: 'Ташкент, Мирабад Авеню, 66 — внутри автомойки Blackstar',
   hours: 'Ежедневно с 10:00 до 21:00'

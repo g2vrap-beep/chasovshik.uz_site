@@ -311,6 +311,11 @@ address .addr { font: 400 18px/1.45 var(--head); text-transform: uppercase; }
 .foot-row { align-items: center; }
 
 
+.ig-ico { width: 18px; height: 18px; flex: none; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: center; }
+.foot-ig { display: inline-flex; align-items: center; gap: 8px; }
+.foot-ig:hover { color: var(--white); }
+
 /* экран загрузки — стили вшиты в <head> index.html */
 
 /* ---------- планшет и телефон ---------- */

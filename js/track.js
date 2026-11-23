@@ -89,6 +89,8 @@
       track('phone_click', { place: sec ? (sec.id || sec.className.split(' ')[0]) : '' });
     } else if (a.classList.contains('js-map')) {
       track('map_click');
+    } else if (a.classList.contains('js-ig')) {
+      track('instagram_click', { place: a.getAttribute('data-place') || '' });
     }
   }, true);
 
