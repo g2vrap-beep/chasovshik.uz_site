@@ -6,7 +6,7 @@ window.SITE = {
   telegram: 'https://t.me/+998958389999', // TODO: заменить на username, напр. https://t.me/chasovshik_uz
   instagram: '',                          // TODO: https://instagram.com/...
   map: 'https://yandex.uz/maps/org/chasovshik_uz/70462933949/',
-  address: 'Ташкент, Мирабад авеню, 66 — внутри автомойки Blackstar',
+  address: 'Ташкент, Мирабад Авеню, 66 — внутри автомойки Blackstar',
   hours: 'Ежедневно с 10:00 до 21:00'
 };
 
