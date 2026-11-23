@@ -6,7 +6,6 @@
   function short(v) { return fmt(v).replace(/\u00a0сум$/, ''); }
 
   /* ссылки из data.js */
-  document.querySelectorAll('.js-tg').forEach(function (a) { a.href = S.telegram; });
   document.querySelectorAll('.js-phone').forEach(function (a) { a.href = S.phoneHref; });
   document.querySelectorAll('.js-map').forEach(function (a) { a.href = S.map; });
 
@@ -75,13 +74,7 @@
     var k = kind(), item = P.find(function (p) { return p.id === current; });
     var msg = 'Здравствуйте! Хочу узнать точную цену: ' + item.name.toLowerCase() + ', ' +
       (k === 'q' ? 'кварцевые' : 'механические') + ' часы. Марка и модель: ';
-    var go = function () { window.open(S.telegram, '_blank', 'noopener'); };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(msg).then(function () {
-        hint.textContent = 'Текст запроса скопирован. Вставьте его в чат и допишите марку часов.';
-        go();
-      }, go);
-    } else go();
+    window.CHS.openTelegram(msg, 'calculator', item.id);
   });
   draw();
 })();

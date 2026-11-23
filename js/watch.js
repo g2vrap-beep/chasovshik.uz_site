@@ -297,6 +297,7 @@
     if (p < 0.035) stage = -1;
     if (stage !== lastStage) {
       lastStage = stage;
+      if (window.CHS && stage >= 0) window.CHS.once('assembly_' + (stage === 99 ? 'done' : 'stage' + (stage + 1)));
       var stageItems = stagesBox ? stagesBox.querySelectorAll('li') : [];
       for (var q = 0; q < stageItems.length; q++) {
         stageItems[q].classList.toggle('is-active', q === stage);

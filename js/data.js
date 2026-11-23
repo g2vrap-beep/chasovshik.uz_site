@@ -3,7 +3,7 @@
 window.SITE = {
   phone: '+998 95 838 99 99',
   phoneHref: 'tel:+998958389999',
-  telegram: 'https://t.me/+998958389999', // TODO: заменить на username, напр. https://t.me/chasovshik_uz
+  telegram: 'chasovshikuz_mirobod',       // username менеджера в Telegram (без @)
   instagram: '',                          // TODO: https://instagram.com/...
   map: 'https://yandex.uz/maps/org/chasovshik_uz/70462933949/',
   address: 'Ташкент, Мирабад Авеню, 66 — внутри автомойки Blackstar',

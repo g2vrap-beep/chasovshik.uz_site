@@ -139,7 +139,7 @@
 | Часы работы | Ежедневно 10:00–21:00 |
 | Телефон | +998 95 838 99 99 |
 | Карта | https://yandex.uz/maps/org/chasovshik_uz/70462933949/ |
-| Telegram | `https://t.me/+998958389999` ⚠️ **уточнить username** |
+| Telegram | https://t.me/chasovshikuz_mirobod — кнопки открывают чат с готовым текстом и кодом источника `[IG-ADS]`, `[G]` … (`js/track.js`) |
 | Instagram | ⚠️ **уточнить ссылку** |
 
 ---
