@@ -63,6 +63,7 @@
     outName.textContent = item.name + (k === 'q' ? ', кварцевые часы' : ', механические часы');
     outPrice.textContent = fmt(item[k]);
     outNote.textContent = (item[k] === 0 ? 'Без оплаты, даже если ремонт не понадобится.' :
+      item.group === 'Батарейки' ? 'Цена включает батарейку и работу.' :
       'Точную цену назовём после бесплатной диагностики.') + (item.w ? ' Гарантия ' + item.w + '.' : '');
     hint.textContent = '';
   }

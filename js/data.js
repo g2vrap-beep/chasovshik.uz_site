@@ -35,9 +35,9 @@ window.PRICES = [
 window.STAGES = [
   { title: 'Механизм',  service: 'Репассаж механизма',          price: 'repass' },
   { title: 'Циферблат', service: 'Установка стрелок и цифр',    price: 'hands' },
-  { title: 'Корпус',    service: 'Полировка корпуса',           price: 'polish' },
+  { title: 'Корпус',    service: 'Ультразвуковая чистка',       price: 'clean' },
   { title: 'Браслет',   service: 'Замена и подгонка браслетов', price: 'fit' },
-  { title: 'Безель',    service: 'Полировка и родирование',     price: 'rhodium' },
+  { title: 'Безель',    service: 'Полировка корпуса и безеля',  price: 'polish' },
   { title: 'Стекло',    service: 'Замена стекла',               price: 'glass' }
 ];
 
