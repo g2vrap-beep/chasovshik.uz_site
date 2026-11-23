@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /SPEC.md
+
+Host: https://chasovshik.uz
+Sitemap: https://chasovshik.uz/sitemap.xml
