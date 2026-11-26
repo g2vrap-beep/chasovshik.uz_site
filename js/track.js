@@ -49,9 +49,10 @@
     return saved.c;
   }
   var SRC = source();
+  try { if (window.ym) ym(114705394, 'params', { src: SRC }); } catch (e) {}
 
   /* ---------- события: в Метрику, GA4, Meta Pixel и Clarity, если они подключены ---------- */
-  var YM_ID = null;   // номер счётчика Яндекс Метрики — вписать после создания
+  var YM_ID = 114705394;   // Яндекс Метрика: CHASOVSHIK — chasovshik.uz
   function track(name, params) {
     params = params || {};
     params.src = SRC;
